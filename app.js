@@ -37,10 +37,11 @@ app.use('/api/user', userRoutes);
 app.use('/api/consignments', consignmentRoutes);
 logger.info(process.env.MONGO);
 console.log(process.env.MONGO)
+let mongo = "mongodb+srv://wojtek:wojtek123@kurierappka-tqv1b.mongodb.net/dev?authSource=admin&replicaSet=kurierappka-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass%20Community&retryWrites=true&ssl=true"
 mongoose.Promise = global.Promise;
 mongoose
   .connect(
-    process.env.MONGO, {
+    mongo, {
     useNewUrlParser: true,
     useFindAndModify: false,
     useCreateIndex: true,
