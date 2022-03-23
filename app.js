@@ -35,7 +35,8 @@ app.use((req, res, next) => {
 
 app.use('/api/user', userRoutes);
 app.use('/api/consignments', consignmentRoutes);
-
+logger.info(process.env.MONGO);
+console.log(process.env.MONGO)
 mongoose.Promise = global.Promise;
 mongoose
   .connect(
