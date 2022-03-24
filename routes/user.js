@@ -13,6 +13,12 @@ const secret = '1234';
 //const secret = process.env.tokenSecret;
 const accessTokenExpiresIn = 3600;
 
+router.get('/dupa', (req,res) => {
+  res.send("asdasd");
+  console.log("ASDASDA")
+  console.log(req.url);
+})
+
 router.post('/getUser', async (req, res) => {
   User.find({ login: req.body.login })
       .then(user => {
