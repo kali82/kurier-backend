@@ -15,8 +15,8 @@ app.use(express.static('files'));
 app.use(bodyParser.json());
 
 const corsOptions = { 
-   origin: process.env.ORIGIN_URL 
-  //origin: 'http://localhost:4200'
+  // origin: process.env.ORIGIN_URL 
+  origin: 'http://kurierapka.pl:8080'
 };
 
 app.use(cors(corsOptions));
@@ -36,9 +36,7 @@ app.use((req, res, next) => {
 app.use('/api/user', userRoutes);
 app.use('/api/consignments', consignmentRoutes);
 logger.info(process.env.MONGO);
-console.log(process.env.MONGO)
 let mongo = "mongodb+srv://wojtek:wojtek123@kurierappka-tqv1b.mongodb.net/dev?authSource=admin&replicaSet=kurierappka-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass%20Community&retryWrites=true&ssl=true"
-console.log(mongo)
 mongoose.Promise = global.Promise;
 mongoose
   .connect(
