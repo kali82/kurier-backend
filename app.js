@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 const corsOptions = { 
   // origin: process.env.ORIGIN_URL 
   origin: [
+    'http://localhost:4200',
     'https://kurierapka.pl',
     'https://murmuring-hollows-26750.herokuapp.com/'
   ]
@@ -25,7 +26,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Origin", "http://localhost:4200"); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
