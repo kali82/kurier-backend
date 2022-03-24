@@ -19,7 +19,7 @@ const corsOptions = {
   origin: [
     'https://murmuring-hollows-26750.herokuapp.com/',
     'http://localhost:4200',
-    'https://kurierapka.pl',
+    //'https://kurierapka.pl',
     
   ]
 };
