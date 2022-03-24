@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 const corsOptions = { 
   // origin: process.env.ORIGIN_URL 
-  origin: 'http://kurierapka.pl:8080'
+  origin: 'http://kurierapka.pl'
 };
 
 app.use(cors(corsOptions));
