@@ -15,16 +15,19 @@ const ConsignmentExcerpt = require('../models/consignmentExcerpt');
 
 // lista przesyłek
 router.post('/', checkAuth, (req, res) => {
+  console.log('1')
   new DHLNodeAPI().createClient(
     process.env.dhlUrl,
    '').done(api => {});
   const userId = req.body.userId;
   let consignments = [];
+  console.log('2')
   getDbConsignments(userId)
     .then(
  
       dbConsignments => {
           let itemsToLabelData = [];
+          console.log('3')
           dbConsignments.forEach(dbConsignment => {
             let consignment = new ConsignmentExcerpt(
               dbConsignment.id,
@@ -33,7 +36,7 @@ router.post('/', checkAuth, (req, res) => {
               dbConsignment.settled
             );
             consignments.push(consignment);
-
+            console.log('4')
             itemsToLabelData.push(
               new Structures.ItemToLabelData(dbConsignment.id)
             );
@@ -42,6 +45,7 @@ router.post('/', checkAuth, (req, res) => {
           
       },
       error => {
+        console.log('5')
         res.status(400).json({
           message: 'Nie udało się pobrać przesyłek.',
           error: error,
@@ -49,6 +53,7 @@ router.post('/', checkAuth, (req, res) => {
       }
     )
     .catch(error => {
+      console.log('6')
       //reject(error);
       logger.error(req.originalUrl.concat(' error'));
 
@@ -73,7 +78,7 @@ router.post('/', checkAuth, (req, res) => {
                   consignments[i].setShipperName = shipment.shipper.name;
                   consignments[i].setReceiverName = shipment.receiver.name;
                   const item = shipment.pieceList.item[0];
-                  //console.log(shipment);
+                  console.log(shipment);
                   consignments[i].setType = item.type;
                   if (item.type != 'ENVELOPE') {
                     consignments[i].setWidth = item.width;
