@@ -17,9 +17,10 @@ app.use(bodyParser.json());
 const corsOptions = { 
   // origin: process.env.ORIGIN_URL 
   origin: [
+    'https://murmuring-hollows-26750.herokuapp.com/',
     'http://localhost:4200',
     'https://kurierapka.pl',
-    'https://murmuring-hollows-26750.herokuapp.com/'
+    
   ]
 };
 

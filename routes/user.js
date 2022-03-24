@@ -102,19 +102,18 @@ router.post('/update', async (req, res) => {
   //return updatedDocument;
 });
 
-router.post('/login', (req, res, next) => {
+router.post('/login', async (req, res, next) => {
   let fetchedUser;
   User.findOne({ login: req.body.login })
     .then(
       user => {
         if (!user) {
           logger.info(req.originalUrl.concat(' response'));
-
-          return res.status(401).json({
-            message: 'Błędne dane logowania.',
-          });
+          return
         }
         fetchedUser = user;
+        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+        console.log(fetchedUser)
 
         return bcrypt.compare(req.body.password, user.password);
       },
@@ -133,7 +132,7 @@ router.post('/login', (req, res, next) => {
         return res.status(401).json({
           message: 'Błędne dane logowania.',
         });
-      }
+      } 
       const accessToken = jwt.sign({ userId: fetchedUser._id }, secret, {
         expiresIn: accessTokenExpiresIn,
       });
@@ -147,7 +146,7 @@ router.post('/login', (req, res, next) => {
         .then(() => {
           logger.info(req.originalUrl.concat(' response'));
 
-          res.status(200).json({
+          return res.status(200).json({
             message: 'Użytkownik zalogowany.',
             userId: fetchedUser._id,
             accessToken: accessToken,
@@ -160,16 +159,17 @@ router.post('/login', (req, res, next) => {
           logger.error(req.originalUrl.concat(' response'));
 
           // dopieścić ten case
-          res.status(500).json({
+          return res.status(500).json({
             message:
               'Kredentiale ok ale zapis tokena w bazie danych nieudany.' + err,
           });
         });
+    
     })
     .catch(err => {
       logger.error(req.originalUrl.concat(' error'));
-
-      res.status(401).json({
+      throw err;
+      return res.status(401).json({
         message: err,
       });
     });
