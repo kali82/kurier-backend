@@ -17,8 +17,8 @@ app.use(bodyParser.json());
 const corsOptions = { 
   // origin: process.env.ORIGIN_URL 
   origin: [
-    'https://hungry-mcnulty-330bd5.netlify.app'
-    //'https://kurierapka.pl',
+    'https://hungry-mcnulty-330bd5.netlify.app',
+    'https://kurierapka.pl'
     //'http://localhost:4200',
     // 'https://murmuring-hollows-26750.herokuapp.com',
   
