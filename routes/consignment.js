@@ -660,7 +660,7 @@ function connectDHL() {
     new DHLNodeAPI().createClient('https://dhl24.com.pl/webapi2', '').done(
       api => {  
         console.log("before set auth data");
-        api.setAuthData('2381128', 'QRsb5lCEWwln:Rg');
+        api.setAuthData('STARADAMALEGIAWARSZAWA', 'QRsb5lCEWwln:Rg');
         resolve(api)
       },
       error => {
