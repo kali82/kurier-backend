@@ -245,8 +245,8 @@ router.patch('/', checkAuth, (req, res) => {
    
   });
   new DHLNodeAPI().createClient(
-     process.env.dhlUrl,'').done(api => {    
-      api.setAuthData(process.env.dhlUser, process.env.dhlPass);
+     'https://dhl24.com.pl/webapi2','').done(api => {    
+      api.setAuthData('STARADAMALEGIAWARSZAWA', 'QRsb5lCEWwln:Rg');
       api
         .deleteShipments(new Structures.ArrayOfString(selectedConsignmentsId))
         .done(
@@ -306,9 +306,9 @@ router.post('/create', checkAuth, (req, res) => {
   const shipmentDateTime = req.body.shipmentDateTime;
 
   new DHLNodeAPI()
-    .createClient(process.env.dhlUrl, '')
+    .createClient('https://dhl24.com.pl/webapi2', '')
     .done(api => {
-      api.setAuthData(process.env.dhlUser, process.env.dhlPass);
+      api.setAuthData('STARADAMALEGIAWARSZAWA', 'QRsb5lCEWwln:Rg');
       api
         .createShipments([
           new Structures.ArrayOfShipmentfulldata([
@@ -365,7 +365,7 @@ router.post('/create', checkAuth, (req, res) => {
               new Structures.PaymentData(
                 paymentMethod,
                 payerType,
-                process.env.dhlClient,
+                '2381128',
                 undefined
               ),
               new Structures.ServiceDefinition(
@@ -657,10 +657,10 @@ router.get('/:consignmentId', checkAuth, (req, res) => {
 
 function connectDHL() {
   return new Promise((resolve, reject) => {
-    new DHLNodeAPI().createClient(process.env.dhlUrl, '').done(
+    new DHLNodeAPI().createClient('https://dhl24.com.pl/webapi2', '').done(
       api => {  
         console.log("before set auth data");
-        api.setAuthData(process.env.dhlUser, process.env.dhlPass);
+        api.setAuthData('2381128', 'QRsb5lCEWwln:Rg');
         resolve(api)
       },
       error => {
@@ -752,7 +752,7 @@ router.patch('/settle', checkAuth, (req, res) => {
 });
 
 function buildQueryForDbUser(userId) {
-  const isAdmin = userId === process.env.adminId ? true : false;
+  const isAdmin = userId === '5ead7ab5556feb3794d8b0a5' ? true : false;
   const query = isAdmin ? null : { _id: userId };
 
   return query;
