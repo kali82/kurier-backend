@@ -30,6 +30,8 @@ router.post('/', checkAuth, (req, res) => {
           let itemsToLabelData = [];
           console.log('3')
           dbConsignments.forEach(dbConsignment => {
+            console.log('XXX')
+            console.log(dbConsignment)
             let consignment = new ConsignmentExcerpt(
               dbConsignment.id,
               dbConsignment.creationDateTime,
@@ -41,6 +43,8 @@ router.post('/', checkAuth, (req, res) => {
             itemsToLabelData.push(
               new Structures.ItemToLabelData(dbConsignment.id)
             );
+            console.log(dbConsignment.id)
+            console.log(itemsToLabelData)
           });
           return itemsToLabelData.length !== 0 ? itemsToLabelData : 0;
           
