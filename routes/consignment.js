@@ -110,7 +110,7 @@ router.post('/', checkAuth, (req, res) => {
               .catch(error => {
           
                 console.log(error);
-                
+                resolve(api);
                 reject(error);
               });
           });
