@@ -17,11 +17,12 @@ const ConsignmentExcerpt = require('../models/consignmentExcerpt');
 router.post('/', checkAuth, (req, res) => {
   console.log('1')
   new DHLNodeAPI().createClient(
-    process.env.dhlUrl,
+    'https://dhl24.com.pl/webapi2',
    '').done(api => {});
   const userId = req.body.userId;
   let consignments = [];
   console.log('2')
+  console.log(userId)
   getDbConsignments(userId)
     .then(
  
