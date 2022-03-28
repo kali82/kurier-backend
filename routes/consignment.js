@@ -15,23 +15,17 @@ const ConsignmentExcerpt = require('../models/consignmentExcerpt');
 
 // lista przesyłek
 router.post('/', checkAuth, (req, res) => {
-  console.log('1')
   new DHLNodeAPI().createClient(
     'https://dhl24.com.pl/webapi2',
    '').done(api => {});
   const userId = req.body.userId;
   let consignments = [];
-  console.log('2')
-  console.log(userId)
   getDbConsignments(userId)
     .then(
  
       dbConsignments => {
           let itemsToLabelData = [];
-          console.log('3')
           dbConsignments.forEach(dbConsignment => {
-            console.log('XXX')
-            console.log(dbConsignment)
             let consignment = new ConsignmentExcerpt(
               dbConsignment.id,
               dbConsignment.creationDateTime,
@@ -39,18 +33,14 @@ router.post('/', checkAuth, (req, res) => {
               dbConsignment.settled
             );
             consignments.push(consignment);
-            console.log('4')
             itemsToLabelData.push(
               new Structures.ItemToLabelData(dbConsignment.id)
             );
-            console.log(dbConsignment.id)
-            console.log(itemsToLabelData)
           });
           return itemsToLabelData.length !== 0 ? itemsToLabelData : 0;
           
       },
       error => {
-        console.log('5')
         res.status(400).json({
           message: 'Nie udało się pobrać przesyłek.',
           error: error,
@@ -58,12 +48,11 @@ router.post('/', checkAuth, (req, res) => {
       }
     )
     .catch(error => {
-      console.log('6')
       //reject(error);
       logger.error(req.originalUrl.concat(' error'));
 
       res.status(400).json({
-        message: 'Nie udało się pobrać przesyłek.4',
+        message: 'Nie udało się pobrać przesyłek.',
         error: error,
       });
     })
@@ -108,10 +97,14 @@ router.post('/', checkAuth, (req, res) => {
                 resolve(api);
               })
               .catch(error => {
-          
+                
                 console.log(error);
                 resolve(api);
                 reject(error);
+                res.status(400).json({
+                  message: 'Brak przesyłeknetl',
+                  error: error,
+                });
               });
           });
         })
@@ -120,7 +113,7 @@ router.post('/', checkAuth, (req, res) => {
           logger.error(req.originalUrl.concat(' error'));
 
           // res.status(400).json({
-          //   message: 'Nie udało się pobrać przesyłek.3',
+          //   message: 'Nie udało się pobrać przesyłek',
           //   error: error,
           // });
         })
