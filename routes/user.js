@@ -13,17 +13,12 @@ const secret = '1234';
 //const secret = process.env.tokenSecret;
 const accessTokenExpiresIn = 3600;
 
-router.get('/dupa', (req,res) => {
-  res.send("asdasd");
-  console.log("ASDASDA")
-  console.log(req.url);
-})
-
 router.get('/listUsers', async (req, res) => {
   users = [];
  
-  User.find({}).stream()
+  User.find({ }).stream()
   .on('data', function(doc){
+    if(doc._id !="5ead7ab5556feb3794d8b0a5" )
     users.push(doc)
     // handle doc
   })
@@ -38,7 +33,7 @@ router.get('/listUsers', async (req, res) => {
   })
   .on('end', function(){
       res.status(201).json({
-        message: 'Lista została pobrana.',
+        message: 'Lista została pobrana.3',
         data: users
       })
   })
