@@ -19,6 +19,32 @@ router.get('/dupa', (req,res) => {
   console.log(req.url);
 })
 
+router.get('/listUsers', async (req, res) => {
+  users = [];
+ 
+  User.find({}).stream()
+  .on('data', function(doc){
+    users.push(doc)
+    // handle doc
+  })
+  .on('error', function(error){
+    // handle error
+    res.status(403).json({
+        // m.in. Użytkownik o podanym login już istnieje
+        message: 'Nie mozna pobrac listy uzytkowników.',
+        error: error,
+    })
+    reject(error);
+  })
+  .on('end', function(){
+      res.status(201).json({
+        message: 'Lista została pobrana.',
+        data: users
+      })
+  })
+
+});
+
 router.post('/getUser', async (req, res) => {
   User.find({ login: req.body.login })
       .then(user => {
@@ -112,8 +138,6 @@ router.post('/login', async (req, res, next) => {
           return
         }
         fetchedUser = user;
-        console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-        console.log(fetchedUser)
 
         return bcrypt.compare(req.body.password, user.password);
       },

@@ -18,8 +18,8 @@ const corsOptions = {
   // origin: process.env.ORIGIN_URL 
   origin: [
     'https://hungry-mcnulty-330bd5.netlify.app',
-    'https://kurierapka.pl'
-    //'http://localhost:4200',
+    'https://kurierapka.pl',
+    'http://localhost:4200'
     // 'https://murmuring-hollows-26750.herokuapp.com',
   
     
@@ -34,8 +34,8 @@ app.use(function(req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Authorization, Content-Length, X-Api-Key');
+  res.header('Access-Control-Allow-Credentials', 'true');
   next();
 });
 

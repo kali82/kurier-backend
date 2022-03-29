@@ -12,6 +12,7 @@ const Structures = require('../DHL/Structures');
 const DHLNodeAPI = require('../DHL/services').DHLNodeAPI;
 const User = require('../models/user');
 const ConsignmentExcerpt = require('../models/consignmentExcerpt');
+const { resolve } = require('path');
 
 // lista przesyłek
 router.post('/', checkAuth, (req, res) => {
@@ -65,6 +66,8 @@ router.post('/', checkAuth, (req, res) => {
                 new Structures.ArrayOfItemtolabeldata(itemsToLabelData)
               )
               .then(result => {
+                console.log('itemsToLabelData')
+                console.log(itemsToLabelData)
                 const shipments = result[0].getLabelsDataResult.item;
                 for (let i = 0; i < shipments.length; i++) {
                   const shipment = shipments[i];
@@ -94,30 +97,35 @@ router.post('/', checkAuth, (req, res) => {
                 }
               })
               .then(() => {
+                console.log("XD");
+                // console.log(error);
+               
                 resolve(api);
               })
               .catch(error => {
-                
+                console.log("XD2");
                 console.log(error);
                 resolve(api);
                 reject(error);
-                res.status(400).json({
-                  message: 'Brak przesyłeknetl',
-                  error: error,
-                });
+                // res.status(400).json({
+                //   message: 'Brak przesyłek.',
+                //   error: error,
+                // });
               });
           });
         })
         .catch(error => {
+          console.log("XD3");
           reject(error);
           logger.error(req.originalUrl.concat(' error'));
 
-          // res.status(400).json({
-          //   message: 'Nie udało się pobrać przesyłek',
-          //   error: error,
-          // });
+          res.status(400).json({
+            message: 'Nie udało się pobrać przesyłek66',
+            error: error,
+          });
         })
         .then(api => {
+          console.log("XD4");
           let promises = [];
           for (let i = 0; i < consignments.length; i++) {
             promises.push(
@@ -131,7 +139,7 @@ router.post('/', checkAuth, (req, res) => {
                       items =
                       result[0].getTrackAndTraceInfoResult.events.item;
                     } catch(err){
-
+                        resolve()
                     }
                     
                     if (items) {
@@ -152,6 +160,7 @@ router.post('/', checkAuth, (req, res) => {
                     resolve();
                   })
                   .catch(error => {
+                    console.log("XD7");
                     //console.log(error)
                     reject(error);
                   });
@@ -163,7 +172,7 @@ router.post('/', checkAuth, (req, res) => {
         })
         .catch(error => {
           logger.error(req.originalUrl.concat(' error'));
-
+          resolve()
           res.status(400).json({
             message: 'Brak przesyłek',
             error: error,
@@ -179,7 +188,7 @@ router.post('/', checkAuth, (req, res) => {
         })
         .catch(error => {
           logger.error(req.originalUrl.concat(' error'));
-
+          resolve()
           res.status(400).json({
             message: 'Nie udało się pobrać przesyłek.6',
             error: error,
