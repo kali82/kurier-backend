@@ -24,6 +24,10 @@ const userSchema = mongoose.Schema(
         settled: { type: Boolean }
       },
     ],
+    img: {
+      data: { type: Buffer },
+      contentType: { type: String }
+    }
   },
   { collection: 'users' }
 );

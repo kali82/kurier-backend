@@ -3,15 +3,60 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const uid = require('rand-token').uid;
-
+var multer = require('multer');
 const logger = require('../logger');
 const User = require('../models/user');
 const RefreshToken = require('../models/refreshToken');
 const user = require('../models/user');
+var fs = require('fs');
+var path = require('path');
 
 const secret = '1234';
 //const secret = process.env.tokenSecret;
 const accessTokenExpiresIn = 3600;
+
+var storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './uploads');
+  },
+  filename: (req, file, cb) => {
+    console.log(file);
+    var filetype = '';
+    if(file.mimetype === 'image/gif') {
+      filetype = 'gif';
+    }
+    if(file.mimetype === 'image/png') {
+      filetype = 'png';
+    }
+    if(file.mimetype === 'image/jpeg') {
+      filetype = 'jpg';
+    }
+    cb(null, 'image-' + Date.now() + '.' + filetype);
+  }
+});
+var upload = multer({storage: storage});
+
+router.post('/upload', upload.single('file'), (req, res, next) => {
+
+
+  var obj = {
+      img: {
+          data: fs.mkdirSync(path.join(__dirname + '/uploads/' )),
+          contentType: 'image/png'
+      }
+  }
+  console.log(obj)
+  const filter = {login: req.body.login};
+  User.findOneAndUpdate(filter,obj,{returnOriginal: false, upsert: true}, (err, doc) => {
+   if (err) {
+       console.log("Something wrong when updating data!");
+   } else {
+     res.status(201).json({
+       message: 'Zaktualizowano zdjecie "' + doc.login + '".'
+     });
+   }
+  });
+});
 
 router.get('/listUsers', async (req, res) => {
   users = [];
@@ -229,5 +274,46 @@ router.post('/accessToken', (req, res, next) => {
       });
     });
 });
+
+function encodeFile(file) {
+  // read binary data
+  var bitmap = fs.readFileSync(file);
+  // convert binary data to base64 encoded string
+  return new Buffer(bitmap).toString('base64');
+}
+
+function decodeFile(encodedData) {
+  return new Promise((resolve, reject) => {
+    const encodedFile = encodedData.labelData;
+    const buffer = new Buffer.from(encodedFile, 'base64');
+    const relativePath = encodedData.shipmentId.concat(
+      '/',
+      encodedData.labelType,
+      '/'
+    );
+    const absolutePath = './files/'.concat(relativePath);
+    if (!fs.existsSync(absolutePath)) {
+      fs.mkdirSync(absolutePath, { recursive: true }, err => {
+        if (err) {
+          logger.error('decodeFile() error');
+
+          reject(err);
+        }
+      });
+    }
+    absFilePath = absolutePath.concat(encodedData.labelName);
+    fs.writeFileSync(absFilePath, buffer, err => {
+      if (err) {
+        logger.error('decodeFile() error');
+
+        reject(err);
+      }
+    });
+    relFilePath = relativePath.concat(encodedData.labelName);
+    logger.info('decodeFile() response');
+
+    resolve(relFilePath);
+  });
+}
 
 module.exports = router;

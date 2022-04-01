@@ -11,9 +11,11 @@ const consignmentRoutes = require('./routes/consignment');
 const app = express();
 
 app.use(express.static('files'));
-
+app.use(express.static('uploads'));
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
-
+// Set EJS as templating engine 
+app.set("view engine", "ejs");
 const corsOptions = { 
   // origin: process.env.ORIGIN_URL 
   origin: [
