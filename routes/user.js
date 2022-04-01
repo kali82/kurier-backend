@@ -184,16 +184,18 @@ router.post('/login', async (req, res, next) => {
       error => {
         logger.error(req.originalUrl.concat(' response'));
 
-        return res.status(500).json({
-          message: "dupa "+ error,
-        });
+        return res
+        .status(500).json({message: "dupa "+ error,})
+        .header('Access-Control-Allow-Origin', 'duparomana');
       }
     )
     .then(result => {
       if (!result) {
         logger.info(req.originalUrl.concat(' response'));
 
-        return res.status(401).json({
+        return res.status(401)
+        .header('Access-Control-Allow-Origin', '*')
+        .json({
           message: 'Błędne dane logowania.',
         });
       } 
@@ -217,7 +219,7 @@ router.post('/login', async (req, res, next) => {
             expiresIn: accessTokenExpiresIn,
             login: fetchedUser.login,
             refreshToken: refreshToken,
-          });
+          }).writeHead({'Access-Control-Allow-Origin': 'adam.pl'});
         })
         .catch(err => {
           logger.error(req.originalUrl.concat(' response'));
