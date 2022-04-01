@@ -185,8 +185,7 @@ router.post('/login', async (req, res, next) => {
         logger.error(req.originalUrl.concat(' response'));
 
         return res
-        .status(500).json({message: "dupa "+ error,})
-        .header('Access-Control-Allow-Origin', 'duparomana');
+        .status(500).json({message: "dupa "+ error,});
       }
     )
     .then(result => {
@@ -219,7 +218,7 @@ router.post('/login', async (req, res, next) => {
             expiresIn: accessTokenExpiresIn,
             login: fetchedUser.login,
             refreshToken: refreshToken,
-          }).writeHead({'Access-Control-Allow-Origin': 'adam.pl'});
+          });
         })
         .catch(err => {
           logger.error(req.originalUrl.concat(' response'));
