@@ -194,7 +194,7 @@ router.post('/login', async (req, res, next) => {
         logger.info(req.originalUrl.concat(' response'));
 
         return res.status(401)
-        .header('Access-Control-Allow-Origin', '*')
+        .header('Access-Control-Allow-Origin', 'XD')
         .json({
           message: 'Błędne dane logowania.',
         });
