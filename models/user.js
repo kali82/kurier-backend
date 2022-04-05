@@ -27,7 +27,8 @@ const userSchema = mongoose.Schema(
     img: {
       data: { type: Buffer },
       contentType: { type: String }
-    }
+    },
+    avatar: { type: String }
   },
   { collection: 'users' }
 );

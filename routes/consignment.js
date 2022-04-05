@@ -66,8 +66,6 @@ router.post('/', checkAuth, (req, res) => {
                 new Structures.ArrayOfItemtolabeldata(itemsToLabelData)
               )
               .then(result => {
-                console.log('itemsToLabelData')
-                console.log(itemsToLabelData)
                 const shipments = result[0].getLabelsDataResult.item;
                 for (let i = 0; i < shipments.length; i++) {
                   const shipment = shipments[i];
@@ -75,7 +73,6 @@ router.post('/', checkAuth, (req, res) => {
                   consignments[i].setShipperName = shipment.shipper.name;
                   consignments[i].setReceiverName = shipment.receiver.name;
                   const item = shipment.pieceList.item[0];
-                  console.log(shipment);
                   consignments[i].setType = item.type;
                   if (item.type != 'ENVELOPE') {
                     consignments[i].setWidth = item.width;
@@ -97,14 +94,12 @@ router.post('/', checkAuth, (req, res) => {
                 }
               })
               .then(() => {
-                console.log("XD");
-                // console.log(error);
+                 //console.log(error);
                
                 resolve(api);
               })
               .catch(error => {
-                console.log("XD2");
-                console.log(error);
+                console.log(error)
                 resolve(api);
                 reject(error);
                 // res.status(400).json({
@@ -115,7 +110,6 @@ router.post('/', checkAuth, (req, res) => {
           });
         })
         .catch(error => {
-          console.log("XD3");
           reject(error);
           logger.error(req.originalUrl.concat(' error'));
 
@@ -125,7 +119,6 @@ router.post('/', checkAuth, (req, res) => {
           });
         })
         .then(api => {
-          console.log("XD4");
           let promises = [];
           for (let i = 0; i < consignments.length; i++) {
             promises.push(
@@ -160,7 +153,6 @@ router.post('/', checkAuth, (req, res) => {
                     resolve();
                   })
                   .catch(error => {
-                    console.log("XD7");
                     //console.log(error)
                     reject(error);
                   });
@@ -209,7 +201,6 @@ router.post('/', checkAuth, (req, res) => {
 router.patch('/', checkAuth, (req, res) => {
   let selectedConsignmentsId = [];
   let selectedConsignments = req.body.selectedConsignments;
-  console.log(selectedConsignments)
   //let userId = req.body.userId;
 
   selectedConsignments.forEach(selected => {
@@ -218,7 +209,6 @@ router.patch('/', checkAuth, (req, res) => {
             console.log(err);
         }
         else{
-            console.log(user[0]);
             selectedConsignmentsId.push(selected.consignmentId);
             user[0].consignments.forEach((item, index) => {
               if (item.id === selected.consignmentId) {
@@ -712,16 +702,9 @@ router.patch('/settle', checkAuth, (req, res) => {
             console.log(err);
         }
         else{
-            console.log(user[0]);
             selectedConsignmentsId.push(selected.consignmentId);
-            console.log("CONSIGNMENTS");
-            console.log(user[0].consignments);
             user[0].consignments.forEach((item, index) => {
-              console.log(item.id);
-              console.log(selected);
               if (item.id == selected.consignmentId) {
-                console.log("ROZLICZONE")
-                console.log(index)
                 user[0].consignments[index].settled =true;
               }
             });
@@ -729,23 +712,6 @@ router.patch('/settle', checkAuth, (req, res) => {
         user[0].save();
     
     });
-      //console.log(user2);
-    //   User.findById(userId, (err, user) => {
-    //     if (err) {
-    //       res.status(400).json({
-    //         message: 'Użytkownik nie istnieje.',
-    //         error: err,
-    //       });
-    //     }
-    //   selectedConsignmentsId.push(selected.consignmentId);
-    //   user.consignments.forEach((item, index) => {
-    //     if (item.id === selected.consignmentId) {
-    //       user2.consignments.splice(index, 1);
-    //     }
-    //   });
-    //   user2.save();
-    // });
-   
   });
   res.status(200).json({
     message:

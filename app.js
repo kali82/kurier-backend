@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+var multer = require('multer');
 const bodyParser = require('body-parser');
 require('dotenv').config({ path: './.env' });
 
@@ -9,7 +10,8 @@ const userRoutes = require('./routes/user');
 const consignmentRoutes = require('./routes/consignment');
 
 const app = express();
-
+global.__basedir = __dirname;
+global.baseUrl = '/resources/static/assets/uploads'
 app.use(express.static('files'));
 app.use(express.static('uploads'));
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -25,9 +27,9 @@ const corsOptions = {
   ],
   credentials: true
 };
-
+// app.use(multer().any());
 app.use(cors(corsOptions));
-
+app.use(express.urlencoded({ extended: true }));
 app.use(function(req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
