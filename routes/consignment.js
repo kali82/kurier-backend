@@ -218,22 +218,7 @@ router.patch('/', checkAuth, (req, res) => {
         }
         user[0].save();
     });
-      //console.log(user2);
-    //   User.findById(userId, (err, user) => {
-    //     if (err) {
-    //       res.status(400).json({
-    //         message: 'Użytkownik nie istnieje.',
-    //         error: err,
-    //       });
-    //     }
-    //   selectedConsignmentsId.push(selected.consignmentId);
-    //   user.consignments.forEach((item, index) => {
-    //     if (item.id === selected.consignmentId) {
-    //       user2.consignments.splice(index, 1);
-    //     }
-    //   });
-    //   user2.save();
-    // });
+
    
   });
   new DHLNodeAPI().createClient(
@@ -693,9 +678,7 @@ function getDbConsignments(userId) {
 router.patch('/settle', checkAuth, (req, res) => {
   let selectedConsignmentsId = [];
   let selectedConsignments = req.body.selectedConsignments;
-  //console.log(selectedConsignments)
-  //let userId = req.body.userId;
-
+  
   selectedConsignments.forEach(selected => {
       User.find({ login: selected.userName}, function (err, user) {
         if (err){

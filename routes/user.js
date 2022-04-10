@@ -122,6 +122,28 @@ router.post('/getUser', async (req, res) => {
         //reject(error);
       });
   });
+//////////////////////////////////////////////////////////
+
+router.patch('/delete', (req, res, next) => {
+  console.log(req)
+  const filter = {login: req.body.login};
+  User.findOneAndRemove(filter, (err,doc)=>{
+    if (err) {
+      console.log("Something wrong when deleting user!");
+  } else {
+    res.status(201).json({
+      message: 'Usunięto użytkownika.'
+    });
+  }
+  })
+
+
+});
+
+
+
+
+//////////////////////////////////////////////////////////
 
 router.post('/create', (req, res, next) => {
   bcrypt.hash(req.body.password, 10).then(hash => {
@@ -133,7 +155,6 @@ router.post('/create', (req, res, next) => {
     user.save().then(
       result => {
         logger.info(req.originalUrl.concat(' response'));
-
         res.status(201).json({
           message: 'Użytkownik "' + result.login + '" został zarejestrowany.',
           result: result,
