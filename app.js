@@ -4,11 +4,9 @@ const cors = require('cors');
 var multer = require('multer');
 const bodyParser = require('body-parser');
 require('dotenv').config({ path: './.env' });
-
 const logger = require('./logger');
 const userRoutes = require('./routes/user');
 const consignmentRoutes = require('./routes/consignment');
-
 const app = express();
 global.__basedir = __dirname;
 global.baseUrl = '/resources/static/assets/uploads'
