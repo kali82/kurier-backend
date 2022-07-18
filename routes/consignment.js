@@ -16,15 +16,15 @@ const { resolve } = require('path');
 
 // lista przesyłek
 router.post('/', checkAuth, (req, res) => {
-  let xd = new Date("23.05.2022, 13:39:26");
-  console.log(xd);
+  // let xd = new Date("23.05.2022, 13:39:26");
+  // console.log(xd);
   new DHLNodeAPI().createClient(
     'https://dhl24.com.pl/webapi2',
    '').done(api => {});
   const userId = req.body.userId;
   ////DATE RANGe parameteers here !
-  const startDateTimemilis= req.body.dateRange.start ? new Date(req.body.dateRange.start).getTime() : null;
-  const endDateTimemilis = req.body.endDateTime.end ? new Date(req.body.endDateTime.end).getTime() : null;
+  // const startDateTimemilis= req.body.dateRange.start ? new Date(req.body.dateRange.start).getTime() : null;
+  // const endDateTimemilis = req.body.endDateTime.end ? new Date(req.body.endDateTime.end).getTime() : null;
   let consignments = [];
   getDbConsignments(userId)
     .then(
