@@ -21,6 +21,7 @@ const userSchema = mongoose.Schema(
         id: String,
         creationDateTime: { type: String },
         shipmentDateTime: { type: String },
+        shipmentDateMilis: { type: Number },
         settled: { type: Boolean }
       },
     ],

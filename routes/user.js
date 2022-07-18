@@ -104,7 +104,6 @@ router.get('/listUsers', async (req, res) => {
 });
 
 router.post('/getUser', async (req, res) => {
-  dupa = req.body.login;
   User.find({ login: req.body.login })
       .then(user => {
         res.status(201).json({
@@ -214,7 +213,7 @@ router.post('/login', async (req, res, next) => {
         logger.error(req.originalUrl.concat(' response'));
 
         return res
-        .status(500).json({message: "dupa "+ error,});
+        .status(500).json({message: " " + error,});
       }
     )
     .then(result => {
@@ -222,7 +221,7 @@ router.post('/login', async (req, res, next) => {
         logger.info(req.originalUrl.concat(' response'));
 
         return res.status(401)
-        .header('Access-Control-Allow-Origin', 'XD')
+       // .header('Access-Control-Allow-Origin', 'XD')
         .json({
           message: 'Błędne dane logowania.',
         });

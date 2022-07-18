@@ -16,23 +16,38 @@ const { resolve } = require('path');
 
 // lista przesyłek
 router.post('/', checkAuth, (req, res) => {
+  let xd = new Date("23.05.2022, 13:39:26");
+  console.log(xd);
   new DHLNodeAPI().createClient(
     'https://dhl24.com.pl/webapi2',
    '').done(api => {});
   const userId = req.body.userId;
+  ////DATE RANGe parameteers here !
+  const startDateTimemilis= req.body.dateRange.start ? new Date(req.body.dateRange.start).getTime() : null;
+  const endDateTimemilis = req.body.endDateTime.end ? new Date(req.body.endDateTime.end).getTime() : null;
   let consignments = [];
   getDbConsignments(userId)
     .then(
  
       dbConsignments => {
           let itemsToLabelData = [];
+          // not for ech
+          // check and filter date time here !
+        //   dbConsignments = dbConsignments.filter((item: any) => {
+        //     item.date.getTime() >= fromDate.getTime() &&
+        //     item.date.getTime() <= toDate.getTime();
+        // });
           dbConsignments.forEach(dbConsignment => {
             let consignment = new ConsignmentExcerpt(
               dbConsignment.id,
               dbConsignment.creationDateTime,
               dbConsignment.shipmentDateTime,
-              dbConsignment.settled
+              dbConsignment.settled,
+              dbConsignment.shipmentDateMilis,
+              //new Date(dbConsignment.shipmentDateTime),
+
             );
+            console.log(dbConsignment)
             consignments.push(consignment);
             itemsToLabelData.push(
               new Structures.ItemToLabelData(dbConsignment.id)
@@ -74,12 +89,14 @@ router.post('/', checkAuth, (req, res) => {
                   consignments[i].setReceiverName = shipment.receiver.name;
                   const item = shipment.pieceList.item[0];
                   consignments[i].setType = item.type;
+                  //consignments[i].setShipmentDateTimeMili = new Date(shipment.shipmentDate)
                   if (item.type != 'ENVELOPE') {
                     consignments[i].setWidth = item.width;
                     consignments[i].setHeight = item.height;
                     consignments[i].setLength = item.length;
                     consignments[i].setWeight = item.weight;
                     consignments[i].setPrice = shipment.service.collectOnDeliveryValue;
+                    //consignments[i].setShipmentDateTimeMili = new Date(shipment.shipmentDate)
                   }
                   // wciąż zakładamy, że w przesyłce jest tylko jedna paczka/paleta/koperta
                   // jak sie zmieni wymaganie to do wyjebania
@@ -388,11 +405,19 @@ router.post('/create', checkAuth, (req, res) => {
                 });
               }
 
-              const creationDateTime = new Date().toLocaleString('pl-PL');
+              let shipmentDateMilis = new Date(shipmentDate);
+              let now = new Date();
+              shipmentDateMilis.setHours(now.getHours()+2)
+              shipmentDateMilis.setMinutes(now.getMinutes())
+              shipmentDateMilis.setSeconds(now.getSeconds())
+              let creationDateTime = new Date()
+              creationDateTime.setHours(now.getUTCHours() + 2)
+
               doc.consignments.push({
                 id: consignmentId,
-                creationDateTime: creationDateTime,
+                creationDateTime: creationDateTime.toLocaleString('pl-PL'),
                 shipmentDateTime: shipmentDateTime,
+                shipmentDateMilis: shipmentDateMilis.getTime(),
                 settled: false
               });
               doc.save().then(
@@ -703,7 +728,8 @@ router.patch('/settle', checkAuth, (req, res) => {
 });
 
 function buildQueryForDbUser(userId) {
-  const isAdmin = userId === '5ead7ab5556feb3794d8b0a5' ? true : false;
+  //const isAdmin = userId === '5ead7ab5556feb3794d8b0a5' ? true : false;
+  const isAdmin = userId === '62d518821d8ac38b52dccfeb' ? true : false;
   const query = isAdmin ? null : { _id: userId };
 
   return query;
