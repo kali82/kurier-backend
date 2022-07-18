@@ -44,7 +44,8 @@ app.use((req, res, next) => {
 
 app.use('/api/user', userRoutes);
 app.use('/api/consignments', consignmentRoutes);
-let mongo = "mongodb+srv://wojtek:wojtek123@kurierappka-tqv1b.mongodb.net/dev?authSource=admin&replicaSet=kurierappka-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass%20Community&retryWrites=true&ssl=true"
+let mongo = "mongodb+srv://Maciej:kalisz123@cluster0.ormtz.mongodb.net/kurierappka?authSource=admin&replicaSet=kurierappka-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass%20Community&retryWrites=true&ssl=true";
+//let mongo = "mongodb+srv://wojtek:wojtek123@kurierappka-tqv1b.mongodb.net/dev?authSource=admin&replicaSet=kurierappka-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass%20Community&retryWrites=true&ssl=true"
 mongoose.Promise = global.Promise;
 mongoose
   .connect(
